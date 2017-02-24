@@ -1,0 +1,4 @@
+TO DO:  A stepper motor uses the following sequence of binary numbers to move the motor:  1100, 0110, 0011, 1001.  
+How would I generate these numbers?
+
+
