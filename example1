@@ -16,15 +16,14 @@ ORG 0
       MOVWF TRISB
       MOVWF TRISC
 
-AGAIN MOVF PORTE, 0   ; Load Port E into WREG
-      BNZ X1          ; If z=0, then go to X1
-      MOVLW 99H       ; Set Port B if z = 1 (i.e., zero flag in STATUS Register is set)
-      MOVWF PORTB
-
+AGAIN MOVF PORTE          ; Load Port E into WREG
+      BZ X2          ; If z=0, then go to X1
+      MOVLW 66H
+      MOVWFPORTC
       GOTO AGAIN
 
-X1    MOVLW 66H
-      MOV WF PORTC
+X2    MOVLW 99H
+      MOVWF PORTB
       GOTO AGAIN
 
 END
