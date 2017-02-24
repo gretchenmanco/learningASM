@@ -1,1 +1,24 @@
 
+
+
+
+
+MYREG EQU 0x08 
+   	ORG 0 
+BACK 	MOVLW 0x55 
+   MOVWF PORTB 
+   CALL DELAY 
+   MOVLW 0xAA 
+   MOVWF PORTB 
+   CALL DELAY 
+   GOTO BACK 
+   ORG 300H 
+DELAY 	MOVLW 0xFA 
+   	MOVWF MYREG 
+AGAIN 	NOP 
+   	NOP 
+   	NOP 
+   	DECF MYREG, F 
+   	BNZ AGAIN
+   	RETURN 
+   	END 
