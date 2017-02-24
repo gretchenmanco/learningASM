@@ -1,5 +1,30 @@
-TO DO:
-Write a program to monitor the RE0 bit.  
-When it (RE0) is HIGH, send 99H to PORT B
-When it (RE0) is LOW, send 66H to PORTC.
+# TO DO:
+# Write a program to monitor the RE0 bit.  
+# When it (RE0) is HIGH, send 99H to PORT B
+# When it (RE0) is LOW, send 66H to PORTC.
 
+# Consider doing this as a flowchart (almost as if I would program this example in C)
+# For Dr. W use the following for FC's: Rect = Statement /  Diamond = Condition  /  Ellipse = Start/Stop  / flow vertically
+
+
+
+ORG 0
+
+      MOVLW FFH
+      MOVWF TRISE
+      MOVLW 00H
+      MOVWF TRISB
+      MOVWF TRISC
+
+AGAIN MOVF PORTE, 0   ; Load Port E into WREG
+      BNZ X1          ; If z=0, then go to X1
+      MOVLW 99H       ; Set Port B if z = 1 (i.e., zero flag in STATUS Register is set)
+      MOVWF PORTB
+
+      GOTO AGAIN
+
+X1    MOVLW 66H
+      MOV WF PORTC
+      GOTO AGAIN
+
+END
