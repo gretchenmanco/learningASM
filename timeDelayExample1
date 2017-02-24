@@ -1,4 +1,16 @@
 
+# Example to find the time it takes to execute this set of instructions using my PIC
+# 16 MHz crystal
+# Every oscillation cycle takes 4 instruction cycles
+# 16MHz/4 = 4MHz that is 4 oscillations per one instruction cycle
+# 1/4MHz = time per instruction cycle
+#Totoal Instructions = 3016
+# 3016/(4*10^6Hz) = 7.54*10^-4 seconds
+# RECALL!!!  Essentially I am moving the bits in the register....consider this
+
+# ***Next trial:  create an example so that there is a second between the blinks.
+# ***Next trial:  there is a limit to the maximum value that I can input for the time delay because this is an 8-bit chip
+
 
 
 
