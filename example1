@@ -1,0 +1,5 @@
+TO DO:
+Write a program to monitor the RE0 bit.  
+When it (RE0) is HIGH, send 99H to PORT B
+When it (RE0) is LOW, send 66H to PORTC.
+
