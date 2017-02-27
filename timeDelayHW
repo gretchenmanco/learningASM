@@ -45,4 +45,7 @@ OVER MOVWF L_Byte
 END 
 
 
-Problem 4: Suppose you have a PIC18 with a frequency of 16MHz. You are writing code to blink the LED’s on Port B bits 0-4. It is required to have a 1 second time delay between each change of LED’s. Write the delay subroutine in assembly to achieve this time delay. Be sure to pay attention to the maximum numbers you can use for each loop counter. 
+Problem 4: Suppose you have a PIC18 with a frequency of 16MHz. You are writing code to blink the LED’s on Port B bits 0-4.
+It is required to have a 1 second time delay between each change of LED’s.
+Write the delay subroutine in assembly to achieve this time delay. 
+Be sure to pay attention to the maximum numbers you can use for each loop counter. 
