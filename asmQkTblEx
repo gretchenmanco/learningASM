@@ -7,3 +7,7 @@ Program A:
 2) using DB, store your name beginning at 30H
 
 3) using table commands, move your name from 30H to 50H
+
+***Do once Brute Force (movlw, etc)
+***Do once with Indirect Addressing
+
