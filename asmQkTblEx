@@ -11,3 +11,81 @@ Program A:
 ***Do once Brute Force (movlw, etc)
 ***Do once with Indirect Addressing
 
+
+
+#INCLUDE p18f46k22.inc
+ 
+    ORG 0x00
+    MOVLW 0xFF
+    MOVWF 50H
+    MOVWF 51H
+    MOVWF 52H
+    MOVWF 53H
+    MOVWF 54H; add more lines for FF's...same number as number of letters in your name
+   
+   MOVLW 0x00
+    MOVWF TBLPTRL
+    MOVLW 0x01
+    MOVWF TBLPTRH
+    TBLRD*
+    MOVFF TABLAT, 0x50; table moved to RAM
+    INCF TBLPTRL, F
+    TBLRD*
+    MOVFF TABLAT, 0x51
+    INCF TBLPTRL, F
+    TBLRD*
+    MOVFF TABLAT, 0x52
+    INCF TBLPTRL, F
+    TBLRD*
+    MOVFF TABLAT, 0x53
+    INCF TBLPTRL, F
+    TBLRD*
+    MOVFF TABLAT, 0x54
+    INCF TBLPTRL, F
+    TBLRD*
+    MOVFF TABLAT, 0x55
+    NOP
+    NOP; add more table reads to move entire name
+K   GOTO K
+
+    ORG 0x100
+X   DB "Stacy Wilson"; Table stored in Program Memory
+    END
+    
+    
+    
+    
+    #INCLUDE p18f46k22.inc
+
+Y EQU 0x10
+   
+    ORG 0x00
+    MOVLW 0xFF
+    MOVWF 50H
+    MOVWF 51H
+    MOVWF 52H
+    MOVWF 53H
+    MOVWF 54H; add more lines for FF's...same number as number of letters in your name
+   
+    MOVLW 0x00
+    MOVWF TBLPTRL
+    MOVLW 0x01
+    MOVWF TBLPTRH
+   
+    MOVLW 0x0C
+    MOVWF Y
+   
+    LFSR 0,0x50
+B1  TBLRD*+
+    MOVFF TABLAT, INDF0; table moved to RAM
+    INCF FSR0L,F
+    DECF Y,F
+    BNZ B1
+
+K   GOTO K
+
+    ORG 0x100
+X   DB "Stacy Wilson"; Table stored in Program Memory
+    END
+    
+    
