@@ -1,4 +1,4 @@
-
+*This C code is for the C compiler within MPLABX IDE*
 
 // CONFIG1H
 #pragma config FOSC = INTIO7    // Oscillator Selection bits (Internal oscillator block, CLKOUT function on OSC2)
