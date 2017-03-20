@@ -1,0 +1,115 @@
+; gretchen manco
+; assignment "three bit timer assembly code" 
+; based on "three bit timer flowchart" assignment
+
+	; CONFIG1H
+    config FOSC = INTIO7    ; Oscillator Selection bits (Internal oscillator block, CLKOUT function on OSC2)
+    config PLLCFG = OFF     ; 4X PLL Enable (Oscillator used directly)
+    config PRICLKEN = ON    ; Primary clock enable bit (Primary clock is always enabled)
+    config FCMEN = OFF      ; Fail-Safe Clock Monitor Enable bit (Fail-Safe Clock Monitor disabled)
+    config IESO = OFF       ; Internal/External Oscillator Switchover bit (Oscillator Switchover mode disabled)
+
+    ; CONFIG2L
+    config PWRTEN = OFF     ; Power-up Timer Enable bit (Power up timer disabled)
+    config BOREN = SBORDIS  ; Brown-out Reset Enable bits (Brown-out Reset enabled in hardware only (SBOREN is disabled))
+    config BORV = 190       ; Brown Out Reset Voltage bits (VBOR set to 1.90 V nominal)
+
+    ; CONFIG2H
+    config WDTEN = ON       ; Watchdog Timer Enable bits (WDT is always enabled. SWDTEN bit has no effect)
+    config WDTPS = 32768    ; Watchdog Timer Postscale Select bits (1:32768)
+
+    ; CONFIG3H
+    config CCP2MX = PORTC1  ; CCP2 MUX bit (CCP2 input/output is multiplexed with RC1)
+    config PBADEN = ON      ; PORTB A/D Enable bit (PORTB<5:0> pins are configured as analog input channels on Reset)
+    config CCP3MX = PORTB5  ; P3A/CCP3 Mux bit (P3A/CCP3 input/output is multiplexed with RB5)
+    config HFOFST = ON      ; HFINTOSC Fast Start-up (HFINTOSC output and ready status are not delayed by the oscillator stable status)
+    config T3CMX = PORTC0   ; Timer3 Clock input mux bit (T3CKI is on RC0)
+    config P2BMX = PORTD2   ; ECCP2 B output mux bit (P2B is on RD2)
+    config MCLRE = EXTMCLR  ; MCLR Pin Enable bit (MCLR pin enabled, RE3 input pin disabled)
+
+    ; CONFIG4L
+    config STVREN = ON      ; Stack Full/Underflow Reset Enable bit (Stack full/underflow will cause Reset)
+    config LVP = OFF         ; Single-Supply ICSP Enable bit (Single-Supply ICSP enabled if MCLRE is also 1)
+    config XINST = OFF      ; Extended Instruction Set Enable bit (Instruction set extension and Indexed Addressing mode disabled (Legacy mode))
+
+    ; CONFIG5L
+     config CP0 = OFF        ; Code Protection Block 0 (Block 0 (000800-003FFFh) not code-protected)
+     config CP1 = OFF        ; Code Protection Block 1 (Block 1 (004000-007FFFh) not code-protected)
+     config CP2 = OFF        ; Code Protection Block 2 (Block 2 (008000-00BFFFh) not code-protected)
+     config CP3 = OFF        ; Code Protection Block 3 (Block 3 (00C000-00FFFFh) not code-protected)
+
+    ; CONFIG5H
+     config CPB = OFF        ; Boot Block Code Protection bit (Boot block (000000-0007FFh) not code-protected)
+     config CPD = OFF        ; Data EEPROM Code Protection bit (Data EEPROM not code-protected)
+
+    ; CONFIG6L
+     config WRT0 = OFF       ; Write Protection Block 0 (Block 0 (000800-003FFFh) not write-protected)
+     config WRT1 = OFF       ; Write Protection Block 1 (Block 1 (004000-007FFFh) not write-protected)
+     config WRT2 = OFF       ; Write Protection Block 2 (Block 2 (008000-00BFFFh) not write-protected)
+    config WRT3 = OFF       ; Write Protection Block 3 (Block 3 (00C000-00FFFFh) not write-protected)
+
+    ; CONFIG6H
+    config WRTC = OFF       ; Configuration Register Write Protection bit (Configuration registers (300000-3000FFh) not write-protected)
+    config WRTB = OFF       ; Boot Block Write Protection bit (Boot Block (000000-0007FFh) not write-protected)
+    config WRTD = OFF       ; Data EEPROM Write Protection bit (Data EEPROM not write-protected)
+
+    ; CONFIG7L
+    config EBTR0 = OFF      ; Table Read Protection Block 0 (Block 0 (000800-003FFFh) not protected from table reads executed in other blocks)
+    config EBTR1 = OFF      ; Table Read Protection Block 1 (Block 1 (004000-007FFFh) not protected from table reads executed in other blocks)
+    config EBTR2 = OFF      ; Table Read Protection Block 2 (Block 2 (008000-00BFFFh) not protected from table reads executed in other blocks)
+    config EBTR3 = OFF      ; Table Read Protection Block 3 (Block 3 (00C000-00FFFFh) not protected from table reads executed in other blocks)
+
+    ; CONFIG7H
+    config EBTRB = OFF      ; Boot Block Table Read Protection bit (Boot Block (000000-0007FFh) not protected from table reads executed in other blocks)
+
+	
+	
+COUNTER EQU 0h  
+ORG 0h
+	
+	BANKSEL TRISB	    ; Set up regs below & assign i/o & clear i/o
+	CLRF	TRISB	    ; Set TRISB to all Output
+	CLRF	PORTB	    ; clear portb (set to low)
+	COUNTER 7h	    ; Set counter = 7 (for countdown to zero)
+	CLR	WREG	    ; Set WREG = 0
+X	MOVWF	PORTB	    ; Move value from WREG into PORTB
+	GOTO	DELAY	    ; Call Time delay for 1 second
+			   
+DELAY	CBLOCK		    ; variables
+	d1
+	d2
+	d3
+	ENDC
+	
+DELAY		    ;3999994 cycles ~ 1-second delay
+	MOVLW	0x23
+	MOVWF	d1
+	MOVLW	0xB9
+	MOVWF	d2
+	MOVLW	0x09
+	MOVWF	d3
+	CLRF	WREG
+DELAY_0
+	DECFSZ	d1, f
+	GOTO	$+2
+	DECFSZ	d2, f
+	GOTO	$+2
+	DECFSZ	d3, f
+	GOTO	DELAY_0	    ;2 cycles
+	GOTO	$+1	
+	RETURN
+	
+	DECF	COUNTER	    ; Decrement counter by 1 now that one second has passed
+	BTFSC		    ; Bit test Bit3 for when counter Bit3=1
+			    ; If Bit3=1 then END program
+			    ; Else if Bit3=1, then proceed through the Loop
+	
+    
+    
+LOOP	INCF	WREG	    ; Increment WREG (sot that led's blink in order from 0-7)
+	GOTO	X
+    
+	NOP	
+END
+
+
