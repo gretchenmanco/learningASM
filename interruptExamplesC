@@ -1,0 +1,38 @@
+* Interrupt Examples in C *
+
+* Example 1*
+void interrupt high_priority chk_isr(void);
+
+void main(void)
+{
+   
+    TRISBbits.RB3 = 0; //set RB3 as output
+    TRISBbits.RB2 = 0; //set RB2 as output
+    TRISBbits.RB0 = 1; //set RB0 as input
+
+    INTCONbits.INT0E = 1; //enable Interrupt 0 (RB0 as interrupt)
+    INTCON2bits.INTEDG0 = 0; //cause interrupt at falling edge
+    INTCONbits.INT0F = 0; //reset interrupt flag  & INTCON is REG & INT0F is Bit Name
+
+
+    ei();     // This is like fliping the master switch to enable interrupt
+
+    while(1) //infinite loop
+    {
+        LATB2=0;
+    
+    }
+}
+
+void interrupt high_priority chk_isr(void)
+{
+    //check if the interrupt is caused 
+	by the pin RB0
+    if(INTCONbits.INT0F == 1)
+    {
+        LATB2 = 1;
+         _delay(100000);
+       INTCONbits.INT0F = 0;
+    }
+
+}
