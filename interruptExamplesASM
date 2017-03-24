@@ -53,11 +53,11 @@ int main(void){
     INTCONbits.INT0E = 1; 
     INTCON2bits.INTEDG0 = 0; 
     INTCONbits.INT0F = 0; 
-    INTCONbits.GIE = 1;
+    INTCONbits.GIE = 1;   // GLOBAL interrupt 
 
     ei();       
 
-    while(1){
+    while(1){					// buzzer 
         for(i=0;i<2500;i++){    
         PORTCbits.RC2 = 1;
         _delay(90);
@@ -71,7 +71,7 @@ int main(void){
     }
 }
 
-void interrupt high_priority chk_isr(){
+void interrupt high_priority chk_isr(){		ISR for "silence"
     if(INTCONbits.INT0F == 1)
     {
          PORTCbits.RC2 = 0;
@@ -85,7 +85,7 @@ void interrupt high_priority chk_isr(){
          _delay(100000);
          _delay(100000);
          _delay(100000);
-         INTCONbits.INT0F = 0;
+         INTCONbits.INT0F = 0;		// reset the flag
     }
 }
 
