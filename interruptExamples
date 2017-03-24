@@ -1,0 +1,137 @@
+*Interrupt Examples *
+
+Interrupt will interrupt at any time based upon an input signal, but a subroutine must be called specifically.
+-->hardware interrupt via sensors
+-->polled IO uses too much computation time
+
+
+
+
+*Example 1*
+
+void interrupt high_priority chk_isr(void);
+
+void main(void)
+{
+
+    TRISBbits.RB3 = 0; //set RB3 as output
+    TRISBbits.RB2 = 0; //set RB2 as output
+    TRISBbits.RB0 = 1; //set RB0 as input
+
+    INTCONbits.INT0E = 1; //enable Interrupt 0 (RB0 as interrupt)
+    INTCON2bits.INTEDG0 = 0; //cause interrupt at falling edge
+    INTCONbits.INT0F = 0; //reset interrupt flag
+
+
+    ei();     // This is like fliping the master switch to enable interrupt
+
+    while(1) //infinite loop
+    {
+        LATB2=0;
+
+    }
+}
+
+void interrupt high_priority chk_isr(void)
+{
+    //check if the interrupt is caused by the pin RB0
+    if(INTCONbits.INT0F == 1)
+    {
+        LATB2 = 1;
+         _delay(100000);
+       INTCONbits.INT0F = 0;
+    }
+
+}
+
+* Example 2*
+
+ **remove Jumper J6 on the development board.  DO NOT LOSE THE JUMPER!!!!!!
+
+
+int i;
+void interrupt high_priority chk_isr(void);
+
+int main(void){
+    ANSELB = 0;
+    TRISBbits.RB0 = 1;
+    TRISCbits.RC2 = 0; 	
+    INTCONbits.INT0E = 1; 
+    INTCON2bits.INTEDG0 = 0; 
+    INTCONbits.INT0F = 0; 
+    INTCONbits.GIE = 1;
+
+    ei();       
+
+    while(1){
+        for(i=0;i<2500;i++){    
+        PORTCbits.RC2 = 1;
+        _delay(90);
+        PORTCbits.RC2 = 0;
+        _delay(10);
+    }
+    for(i=0;i<2500;i++){     
+        PORTCbits.RC2 = 0;
+        _delay(100);
+    }
+    }
+}
+
+void interrupt high_priority chk_isr(){
+    if(INTCONbits.INT0F == 1)
+    {
+         PORTCbits.RC2 = 0;
+         _delay(100000); 
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         _delay(100000);
+         INTCONbits.INT0F = 0;
+    }
+}
+
+
+
+* Example 3 *
+
+#INCLUDE p18f46k22.inc
+
+MYREG	EQU	0x20
+DELRG	EQU 0x80
+	ORG	0000H
+	GOTO	MAIN
+	ORG	0008H
+	BTFSS INTCON,RBIF
+	RETFIE
+	GOTO  PB_ISR
+	ORG	00100H
+MAIN	BCF  TRISC,7
+	BSF	TRISB,4
+	BSF INTCON,RBIE
+	BSF INTCON,GIE
+OVER	BRA OVER
+
+PB_ISR
+	ORG 200H
+	MOVF  PORTB,W
+	MOVLW D'250'
+	MOVWF MYREG
+BUZZ	BTG PORTC,7
+	MOVLW D'255'
+	MOVWF DELRG
+DELAY	DECF DELRG,F
+	BNZ DELAY
+	DECF MYREG,F
+	BNZ BUZZ
+	BCF INTCON,RBIF
+	RETFIE
+	END
+  
+  * End of examples *
+  
+  
