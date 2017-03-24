@@ -1,11 +1,5 @@
 *Interrupt Examples *
 
-Interrupt will interrupt at any time based upon an input signal, but a subroutine must be called specifically.
--->hardware interrupt via sensors
--->polled IO uses too much computation time
-
-
-
 
 *Example 1*
 
