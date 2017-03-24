@@ -30,7 +30,7 @@ void interrupt high_priority chk_isr(void)
 	by the pin RB0
     if(INTCONbits.INT0F == 1)
     {
-        LATB2 = 1;
+        LATB2 = 2;
          _delay(100000);
        INTCONbits.INT0F = 0;
     }
