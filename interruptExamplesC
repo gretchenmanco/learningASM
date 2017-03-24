@@ -15,7 +15,7 @@ void main(void)
     INTCONbits.INT0F = 0; //reset interrupt flag  & INTCON is REG & INT0F is Bit Name
 
 
-    ei();     // This is like fliping the master switch to enable interrupt
+    ei();     // This is like flipping the master switch to enable interrupt
 
     while(1) //infinite loop
     {
