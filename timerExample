@@ -1,0 +1,35 @@
+
+
+#include <p18f46k22.h>
+
+void ToDelay (void);
+
+void main(void)
+
+{
+
+TRISB=0;
+
+T0CON = 0x08;
+
+PORTB=0;
+
+
+
+while(1)
+
+{
+
+PORTBbits.RB1 = 1;
+
+ToDelay();
+
+PORTBbits.RB1 = 0;
+
+ToDelay();
+
+}
+
+}
+
+
