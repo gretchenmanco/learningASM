@@ -33,7 +33,7 @@ ToDelay();
 }
 
 
-ToDelay()
+void ToDelay()
 
 {
 
@@ -50,4 +50,4 @@ T0CONbits.TMR0ON = 0;
 INTCONbits.TMR0IF = 0;
 
 }
-void 
+ 
